@@ -13,9 +13,11 @@ environment's key system parameter-argument couplings and logging utility, gives
 the appearance that the code is somewhat more bloated than it really is, but  
 it works, nevertheless.  
 &emsp;  
-**Note - Some Editing Required: Key Components to Make it Work for You**  
+```
+**Note - Some Editing Required: I highlight optional/environment-specific  
+components in the script descriptions below.  
+```
 &emsp;  
-First, an overview of the scripts:  
 &emsp;  
 1). awsConn.pl - main script for managing connections.  
 &emsp;  
@@ -24,12 +26,12 @@ First, an overview of the scripts:
 &emsp;&emsp;CfgAws.  The first two are responsible for setting certain  
 &emsp;&emsp;environment variables and logging tasks executed in a standardized  
 &emsp;&emsp;way, respectively.  These maybe either replaced or ignored so long  
-&emsp;&emsp;their associated instantiation tasks within the code body are also  
-&emsp;&emsp;edited to negate or modify their use.  
+&emsp;&emsp;as their associated instantiation tasks within the code body are 
+&emsp;&emsp;also edited to negate or modify their use.  
 &emsp;  
 &emsp;&emsp;The module CfgAws, however, is crucial to the operation of this  
-&emsp;&emsp;script, however, as it keeps a record of the details pertinent to  
-&emsp;&emsp;EC2 instances.  These include the instance id, for example, which  
+&emsp;&emsp;script as it keeps a record of the details pertinent to EC2  
+&emsp;&emsp;instances.  These include the instance id, for example, which  
 &emsp;&emsp;is of course required when attempting to connect to an AWS server.  
 &emsp;  
 &emsp;&emsp;Sample usage is as follows:
