@@ -19,14 +19,14 @@ components in the script descriptions below.
 ```
 &emsp;  
 &emsp;  
-1). awsConn.pl - main script for managing connections.  
+**1). awsConn.pl** - main script for managing connections.  
 &emsp;  
 &emsp;&emsp;This script imports the standard Perl modules: POSIX, File, & Time  
 &emsp;&emsp;and 3 modules relevant to my own environment: FsSysVars, FsLog, and  
 &emsp;&emsp;CfgAws.  The first two are responsible for setting certain  
 &emsp;&emsp;environment variables and logging tasks executed in a standardized  
 &emsp;&emsp;way, respectively.  These maybe either replaced or ignored so long  
-&emsp;&emsp;as their associated instantiation tasks within the code body are 
+&emsp;&emsp;as their associated instantiation tasks within the code body are  
 &emsp;&emsp;also edited to negate or modify their use.  
 &emsp;  
 &emsp;&emsp;The module CfgAws, however, is crucial to the operation of this  
@@ -43,7 +43,7 @@ awsConn.pl --argv cmd=stop
 
 ```
 &emsp;  
-2). CfgAws.pm - module which contains configuration settings for one or more  
+**2). CfgAws.pm** - module which contains configuration settings for one or more  
 &emsp;  
 &emsp;&emsp;AWS instances (in my case, EC2 instances).  This module contains  
 &emsp;&emsp;important information like the path and filename of key  
@@ -63,7 +63,7 @@ awsConn.pl --argv cmd=stop
 &emsp;&emsp;so long as key machine instance identifiers are passed to the  
 &emsp;&emsp; awsConn.pl script.  
 &emsp;  
-3). sshaws.bash - wrapper for awsConn.pl.  
+**3). sshaws.bash** - wrapper for awsConn.pl.  
 &emsp;  
 &emsp;&emsp;Simplifies calls to awsConn.pl by allowing the user to simply type:  
 &emsp;&emsp;`sshaws <task>`&emsp;&emsp;&emsp;&emsp;&emsp;[task=start/connect/describe/stop]
