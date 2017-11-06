@@ -166,7 +166,6 @@ sub awsConnect
    $ipFile  =~ s/INSTANCE/$inst/g;   
    ($invFile = $ipFile) =~ s/pubDNS/invalid/g;
 
-   $fsLog->die("ERROR: invalid IP/log-on control file: $invFile detected...") if ( -f $invFile );
    $fsLog->die("ERROR: no IP file detected - try starting remote AWS server for: $inst first.") if ( ! -f $ipFile );
 
    $keyPairFile  = $awsCfg{instances}->{$inst}->{keyPairFile};
@@ -176,6 +175,14 @@ sub awsConnect
    { $awsIp = <$fh>; }
    close($fh);
    chomp $awsIp;
+
+   my $currentIp = getInstanceIp($fsLog, $instanceId);
+   if ( $currentIp ne  $awsIp ) {
+      my $alert = "IP Addresses do not match.  Instance: $inst currently running on: $currentIp, file gives: $awsIp...";
+      $fsLog->print($alert);
+      print $alert."\n";
+      $fsLog->die("ERROR: invalid IP/log-on control file: $invFile detected. Try removing: $ipFile and (re)-starting AWS server instance.");
+   }
 
    $cmdString  = "ssh -q -oUserKnownHostsFile=/dev/null -oStrictHostKeyChecking=no ";
    $cmdString .= "-i KEYPAIRFILE USER\@AWSIP";
@@ -188,8 +195,6 @@ sub awsConnect
    $fsLog->print("$cmdString");
 
    exec ("$cmdString");
-
-   #---> check existence of valid file in ~/.aws/ first, raiseerror if not there.
 
 }
 #==============================================================================
@@ -277,6 +282,27 @@ sub awsAuthenticate
 
 
 #==============================================================================
+sub getInstanceIp
+{
+   my ( $fsLog, $instanceId ) = @_;
+
+   $fsLog->print("Fetching instance IP for instance: $instanceId...");
+  
+   my ( $cmdString, $currentIp );
+
+   $cmdString  = "aws ec2 describe-instances --instance-ids $instanceId ";
+   $cmdString .= "--query 'Reservations[0].Instances[0].PublicIpAddress'";
+   $fsLog->print("System('$cmdString')"); 
+
+   $currentIp = `bash -c \"$cmdString\" | tr -d '\n'`;
+   $currentIp =~ s/\"//g;
+   return $currentIp;
+
+}
+#==============================================================================
+
+
+#==============================================================================
 sub awsDescribe
 {
    my ( $fsLog, $fsVars ) = @_;
@@ -290,6 +316,8 @@ sub awsDescribe
    %awsCfg = %{$awsCfg{awsCfgVars}};
  
    $instanceId = $awsCfg{instances}->{$inst}->{instanceId};
+
+   $fsLog->die("Instance: $inst not found in configurations.") if ( ! $instanceId );
 
    $cmdStringRoot = "aws ec2 describe-instances --instance-ids $instanceId";
    $cmdStringCode = $cmdStringRoot." --query 'Reservations[0].Instances[0].State.Code'"; 
