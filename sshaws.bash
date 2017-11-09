@@ -63,7 +63,7 @@ esac
 
 
 echo $pv_cmd_v instance: $inst ...
-perl -w ${HOME}/fsbase/releases/fsprod/src/util/awsConn.pl --argv inst=$inst --argv cmd=$cmd
+perl -w /path/to/awsConn.pl --argv inst=$inst --argv cmd=$cmd
 
 }
 #====================================================================
